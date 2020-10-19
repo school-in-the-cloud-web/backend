@@ -96,6 +96,7 @@ router.post("/login", async (req, res) => {
       res.status(400).json({ message: "user not found" });
     }
   } catch (error) {
+    console.log(error);
     res.status(400).json({message: "All fields are required"})
   }
   
