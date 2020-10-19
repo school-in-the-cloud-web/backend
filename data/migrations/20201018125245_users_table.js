@@ -5,6 +5,7 @@ exports.up = function (knex) {
     tbl.string("lastName");
     tbl.string("password");
     tbl.string("email");
+    tbl.string("role");
   });
 };
 
