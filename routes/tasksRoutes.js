@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const db = require("../data/dbConfig");
-
+const { findTask } = require("../models/utils");
 const Joi = require("joi");
 const options = {
   abortEarly: false,
@@ -72,4 +72,25 @@ router.post("/", async (req, res) => {
   }
 });
 
+
+router.delete("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const task = await findTask({ id });
+    if (task.length === 1) {
+      try {
+        const taskToDelete = task[0].id;
+        await db("tasks").where({ id: taskToDelete }).delete();
+        res.status(200).json({ message: "task deleted" });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "could not process your request" });
+      }
+    } else {
+      res.status(400).json({ message: "task not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "could not process your request" });
+  }
+});
 module.exports = router;

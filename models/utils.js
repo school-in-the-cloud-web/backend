@@ -10,4 +10,8 @@ const addUser = (firstName, lastName, email, password) => {
   return db("users").insert({ firstName, lastName, email, password: hashedPw });
 };
 
-module.exports = { findBy, addUser };
+const findTask = (id) => {
+  return db("tasks").where(id);
+};
+
+module.exports = { findBy, addUser, findTask };
