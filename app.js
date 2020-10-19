@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const app = express()
 const cors = require('cors');
-
+const helmet = require("helmet");
 
 const authRoutes = require("./routes/authRoutes")
 const userRoutes = require("./routes/userRoutes")
@@ -17,6 +17,16 @@ const corsOptions = {
 };;
 
 app.use(cors(corsOptions));
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://cloud-school-api.herokuapp.com/"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  })
+);
 app.use(express.json())
 
 app.use("/auth", authRoutes)
