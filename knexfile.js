@@ -7,6 +7,7 @@ module.exports = {
     connection: {
       filename: './data/cloud-school.sqlite3'
     },
+    useNullAsDefault: true,
     migrations: {
       directory: './data/migrations',
       tableName: 'dbmigrations',
@@ -18,7 +19,8 @@ module.exports = {
     client: 'sqlite3',
     connection: {
       filename: './data/cloud-school.sqlite3'
-    }
+    },
+    useNullAsDefault: true
   }
 
 };
