@@ -14,9 +14,7 @@ const corsOptions = {
   preflightContinue: true,
   methods: "GET,PUT,POST,DELETE",
   optionsSuccessStatus: 200,
-};;
-
-app.use(cors(corsOptions));
+};
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -27,6 +25,7 @@ app.use(
     },
   })
 );
+app.use(cors(corsOptions));
 app.use(express.json())
 
 app.use("/auth", authRoutes)
