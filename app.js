@@ -11,8 +11,11 @@ const taskRoutes = require("./routes/tasksRoutes");
 const { checkAdmin } = require("./middleware");
 
 const corsOptions = {
+  origin: "http://localhost:3000",
   preflightContinue: true,
-};
+  methods: "GET,PUT,POST,DELETE",
+  optionsSuccessStatus: 200,
+};;
 
 app.use(helmet());
 app.use(cors(corsOptions));
