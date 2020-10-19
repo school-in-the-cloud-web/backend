@@ -7,10 +7,10 @@ const checkAdmin = (req, res, next) => {
     if (decoded.role === "admin") {
       next();
     } else {
-      res.status(400).json({ message: "not authorized" });
+      res.status(404).json({ message: "not authorized" });
     }
   } else {
-    res.status(400).json({ message: "You must login" });
+    res.status(404).json({ message: "You must login" });
   }
 };
 
