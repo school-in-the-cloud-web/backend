@@ -2,7 +2,7 @@ const db = require("../data/dbConfig");
 const bcrypt = require("bcrypt");
 
 const findBy = (filter) => {
-  return db("users").where(filter).select("email", "password");
+  return db("users").where(filter).select("email", "password", "role", "id");
 };
 
 const addUser = (firstName, lastName, email, password) => {

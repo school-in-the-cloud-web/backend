@@ -1,6 +1,7 @@
 const router = require("express").Router()
 
 const bcrypt = require("bcrypt");
+var jwt = require("jsonwebtoken");
 
 const db = require("../data/dbConfig");
 const { findBy, addUser } = require("../models/utils");
@@ -46,16 +47,16 @@ router.post('/register', async (req, res) => {
     try {
       const userExists = await findBy({ email });
       if  (userExists.length > 0) {
-        res.status(400).json({  message: "Email in use"  });;
+        res.status(400).json({ message: "Email in use" });
       } else {
-        await addUser(firstName, lastName, email, password);;
+        await addUser(firstName, lastName, email, password);
         res
           .status(201)
           .json({ message: "User Added", token: process.env.SECRET });
       }
     } catch (error) {
       console.log(error)
-      res.status(500).json({  message: "There was an error with your request"  });;
+      res.status(500).json({ message: "There was an error with your request" });
     }
   }
   
@@ -71,7 +72,16 @@ router.post("/login", async (req, res) => {
     const authed = bcrypt.compareSync(password, user.password);
 
     if(authed) {
-      res.status(200).json({  token: process.env.SECRET  });
+      const token = jwt.sign(
+        {
+          sub: user.id,
+          email: user.email,
+          role: user.role,
+        },
+        process.env.SECRET,
+        { expiresIn: "2h" }
+      );
+      res.status(200).json({ token: token });
     } else {
       res.status(400).json({message: "Incorrect password"})
     }
