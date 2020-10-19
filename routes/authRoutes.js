@@ -50,9 +50,7 @@ router.post('/register', async (req, res) => {
         res.status(400).json({ message: "Email in use" });
       } else {
         await addUser(firstName, lastName, email, password);
-        res
-          .status(201)
-          .json({ message: "User Added", token: process.env.SECRET });
+        res.status(201).json({ message: "User Added" });
       }
     } catch (error) {
       console.log(error)
