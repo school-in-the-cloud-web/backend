@@ -32,6 +32,14 @@ exports.seed = function (knex) {
           email: "starullo@email.com",
           role: "admin",
         },
+        {
+          id: 4,
+          firstName: "Jon",
+          lastName: "Volunteer",
+          password: hash,
+          email: "jvolunteer@email.com",
+          role: "volunteer",
+        },
       ]);
     });
 };
