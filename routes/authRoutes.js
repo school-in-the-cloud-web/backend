@@ -1,0 +1,84 @@
+const router = require("express").Router()
+
+const bcrypt = require("bcrypt");
+
+const db = require("../data/dbConfig");
+const { findBy, addUser } = require("../models/utils");
+
+const Joi = require('joi');
+const options = {
+  abortEarly: false,
+  errors: {
+    wrap: {
+      label: ''
+    }
+  }
+};
+
+router.post('/register', async (req, res) => {
+  const { firstName, lastName, password, confirmPassword, email } = req.body;
+
+  const schema = Joi.object({
+    firstName: Joi.string().alphanum().min(3).max(30).required(),
+    lastName: Joi.string().alphanum().min(3).max(30).required(),
+    password: Joi.string().min(6).max(30).required(),
+    confirmPassword: Joi.ref("password"),
+    email: Joi.string().email().required(),
+  });
+  const validation = schema.validate(
+    {
+      firstName,
+      lastName,
+      password,
+      confirmPassword,
+      email,
+    },
+    options
+  );
+
+  if(validation.error) {
+    const errors = validation.error.details;
+    const error = errors.map((error) => {
+      return error.message;
+    });
+    res.status(400).json({ error: error });
+  } else {
+    try {
+      const userExists = await findBy({ email });
+      if  (userExists.length > 0) {
+        res.status(400).json({  message: "Email in use"  });;
+      } else {
+        await addUser(firstName, lastName, email, password);;
+        res
+          .status(201)
+          .json({ message: "User Added", token: process.env.SECRET });
+      }
+    } catch (error) {
+      console.log(error)
+      res.status(500).json({  message: "There was an error with your request"  });;
+    }
+  }
+  
+})
+
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const result = await findBy({ email });
+
+  if (result.length > 0) {
+    const user = result[0];
+    const authed = bcrypt.compareSync(password, user.password);
+
+    if(authed) {
+      res.status(200).json({  token: process.env.SECRET  });
+    } else {
+      res.status(400).json({message: "Incorrect password"})
+    }
+  } else {
+    res.status(400).json({ message: "user not found" });
+  }
+})
+
+
+module.exports = router
