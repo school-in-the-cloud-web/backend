@@ -72,29 +72,33 @@ router.post('/register', async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  const result = await findBy({ email });
-
-  if (result.length > 0) {
-    const user = result[0];
-    const authed = bcrypt.compareSync(password, user.password);
-
-    if(authed) {
-      const token = jwt.sign(
-        {
-          sub: user.id,
-          email: user.email,
-          role: user.role,
-        },
-        process.env.SECRET,
-        { expiresIn: "2h" }
-      );
-      res.status(200).json({ token: token });
+  try {
+    const result = await findBy({ email });
+    if (result.length > 0) {
+      const user = result[0];
+      const authed = bcrypt.compareSync(password, user.password);
+  
+      if(authed) {
+        const token = jwt.sign(
+          {
+            sub: user.id,
+            email: user.email,
+            role: user.role,
+          },
+          process.env.SECRET,
+          { expiresIn: "2h" }
+        );
+        res.status(200).json({ token: token });
+      } else {
+        res.status(400).json({message: "Incorrect password"})
+      }
     } else {
-      res.status(400).json({message: "Incorrect password"})
+      res.status(400).json({ message: "user not found" });
     }
-  } else {
-    res.status(400).json({ message: "user not found" });
+  } catch (error) {
+    res.status(400).json({message: "All fields are required"})
   }
+  
 })
 
 
