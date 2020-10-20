@@ -23,6 +23,7 @@ router.post('/register', async (req, res) => {
     confirmPassword,
     email,
     role,
+    country,
   } = req.body;
 
   const schema = Joi.object({
@@ -32,6 +33,7 @@ router.post('/register', async (req, res) => {
     confirmPassword: Joi.ref("password"),
     email: Joi.string().email().required(),
     role: Joi.string().required(),
+    country: Joi.string().alphanum().min(2).max(2).required(),
   });
   const validation = schema.validate(
     {
@@ -41,6 +43,7 @@ router.post('/register', async (req, res) => {
       confirmPassword,
       email,
       role,
+      country,
     },
     options
   );
@@ -57,10 +60,11 @@ router.post('/register', async (req, res) => {
       if (userExists.length > 0) {
         res.status(400).json({ message: "Email in use" });
       } else {
-        await addUser(firstName, lastName, email, password, role);
+        await addUser(firstName, lastName, email, password, role, country);
         res.status(201).json({ message: "User Added" });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "There was an error with your request" });
     }
   }

@@ -5,9 +5,16 @@ const findBy = (filter) => {
   return db("users").where(filter).select("email", "password", "role", "id");
 };
 
-const addUser = (firstName, lastName, email, password) => {
+const addUser = (firstName, lastName, email, password, role, country) => {
   const hashedPw = bcrypt.hashSync(password, 8);
-  return db("users").insert({ firstName, lastName, email, password: hashedPw });
+  return db("users").insert({
+    firstName,
+    lastName,
+    email,
+    password: hashedPw,
+    role,
+    country,
+  });
 };
 
 const findTasks = (id) => {

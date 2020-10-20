@@ -1,11 +1,12 @@
 exports.up = function (knex) {
   return knex.schema.createTable("users", (tbl) => {
     tbl.increments();
-    tbl.string("firstName");
-    tbl.string("lastName");
-    tbl.string("password");
-    tbl.string("email");
-    tbl.string("role");
+    tbl.string("firstName").notNullable();
+    tbl.string("lastName").notNullable();
+    tbl.string("password").notNullable();
+    tbl.string("email").notNullable();
+    tbl.string("role").notNullable();
+    tbl.string("country").notNullable();
   });
 };
 

@@ -16,4 +16,25 @@ router.get("/volunteer", async (req, res) => {
   }
 });
 
+
+router.get("/student", async (req, res) => {
+  try {
+    const data = await db("users")
+      .join("tasks", "users.id", "=", "tasks.volunteer_id")
+      .select(
+        "users.firstName as instructor_firstName",
+        "users.lastName as instructor_lastName",
+        "users.email as instructor_email",
+        "tasks.name as class_name",
+        "tasks.subject as class_subject",
+        "tasks.description as class_description",
+        "tasks.date as class_date"
+      );
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
 module.exports = router
+
+//.where({ role: "volunteer" })

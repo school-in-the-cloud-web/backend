@@ -15,6 +15,7 @@ exports.seed = function (knex) {
           password: hash,
           email: "matt@mulford.dev",
           role: "admin",
+          country: "US",
         },
         {
           id: 2,
@@ -23,6 +24,7 @@ exports.seed = function (knex) {
           password: hash,
           email: "vscirrotto@email.com",
           role: "admin",
+          country: "MX",
         },
         {
           id: 3,
@@ -31,6 +33,7 @@ exports.seed = function (knex) {
           password: hash,
           email: "starullo@email.com",
           role: "admin",
+          country: "US",
         },
         {
           id: 4,
@@ -39,6 +42,7 @@ exports.seed = function (knex) {
           password: hash,
           email: "jvolunteer@email.com",
           role: "volunteer",
+          country: "CA",
         },
       ]);
     });

@@ -76,7 +76,7 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    const task = await findTask({ id });
+    const task = await db("tasks").where({ id });
     if (task.length === 1) {
       try {
         const taskToDelete = task[0].id;
@@ -90,6 +90,7 @@ router.delete("/:id", async (req, res, next) => {
       res.status(400).json({ message: "task not found" });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "could not process your request" });
   }
 });
