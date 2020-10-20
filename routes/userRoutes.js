@@ -28,7 +28,8 @@ router.get("/student", async (req, res) => {
         "tasks.name as class_name",
         "tasks.subject as class_subject",
         "tasks.description as class_description",
-        "tasks.date as class_date"
+        "tasks.date as class_date",
+        "users.country as class_location"
       );
     res.status(200).json(data);
   } catch (error) {
