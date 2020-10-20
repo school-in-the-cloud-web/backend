@@ -10,10 +10,13 @@ const addUser = (firstName, lastName, email, password) => {
   return db("users").insert({ firstName, lastName, email, password: hashedPw });
 };
 
-const findTask = (id) => {
-  return db("tasks").where(id);
+const findTasks = (id) => {
+  console.log(id);
+  return db("tasks")
+    .where({ volunteer_id: id })
+    .select("id", "name", "subject", "description", "date");
 };
 
 // TODO find tasks for specific vol
 
-module.exports = { findBy, addUser, findTask };
+module.exports = { findBy, addUser, findTasks };

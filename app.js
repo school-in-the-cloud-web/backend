@@ -26,8 +26,9 @@ app.use(
   })
 );
 app.use(cors(corsOptions));
-app.use(express.json());
 app.options("*", cors());
+app.use(express.json());
+
 app.use("/auth", authRoutes)
 app.use("/user", checkAdmin, userRoutes);
 app.use("/tasks", checkAdmin, taskRoutes);
