@@ -14,4 +14,6 @@ const findTask = (id) => {
   return db("tasks").where(id);
 };
 
+// TODO find tasks for specific vol
+
 module.exports = { findBy, addUser, findTask };

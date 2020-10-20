@@ -3,7 +3,6 @@ const router = require("express").Router()
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const db = require("../data/dbConfig");
 const { findBy, addUser } = require("../models/utils");
 
 const Joi = require('joi');
@@ -55,14 +54,13 @@ router.post('/register', async (req, res) => {
   } else {
     try {
       const userExists = await findBy({ email });
-      if  (userExists.length > 0) {
+      if (userExists.length > 0) {
         res.status(400).json({ message: "Email in use" });
       } else {
         await addUser(firstName, lastName, email, password, role);
         res.status(201).json({ message: "User Added" });
       }
     } catch (error) {
-      console.log(error)
       res.status(500).json({ message: "There was an error with your request" });
     }
   }
@@ -96,8 +94,7 @@ router.post("/login", async (req, res) => {
       res.status(400).json({ message: "user not found" });
     }
   } catch (error) {
-    console.log(error);
-    res.status(400).json({message: "All fields are required"})
+    res.status(400).json({ message: "All fields are required" });
   }
   
 })

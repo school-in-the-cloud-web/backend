@@ -6,6 +6,8 @@ const checkAdmin = (req, res, next) => {
     const decoded = jwt.verify(req.headers.authorization, process.env.SECRET);
     if (decoded.role === "admin") {
       next();
+    } else if (decoded.role === "volunteer") {
+      next();
     } else {
       res.status(401).json({ message: "not authorized" });
     }
@@ -13,5 +15,7 @@ const checkAdmin = (req, res, next) => {
     res.status(401).json({ message: "You must login" });
   }
 };
+
+
 
 module.exports = { checkAdmin };
