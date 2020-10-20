@@ -86,7 +86,7 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   const decoded = jwt.verify(req.headers.authorization, process.env.SECRET);
-  if(decoded.role === 'admin') {
+  if (decoded.role === "admin") {
     const { id } = req.params;
     try {
       const task = await db("tasks").where({ id });
@@ -107,9 +107,30 @@ router.delete("/:id", async (req, res) => {
       res.status(500).json({ message: "could not process your request" });
     }
   } else {
-    res.status(401).json({message: "not authorized"})
+    res.status(401).json({ message: "not authorized" });
   }
-  
+});
 
+router.put("/:id", async (req, res) => {
+  const changes = req.body;
+  const decoded = jwt.verify(req.headers.authorization, process.env.SECRET);
+  if (decoded.role === "admin") {
+    const { id } = req.params;
+    try {
+      const task = await db("tasks").where({ id });
+      const taskID = task[0].id;
+      
+      try {
+        await db("tasks").update(changes).where({id: taskID})
+        res.status(200).json({message: "task updated"})
+      } catch (error) {
+        res.status(500).json({ message: "could not process your request" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "could not process your request" });
+    }
+  } else {
+    res.status(401).json({ message: "not authorized" });
+  }
 });
 module.exports = router;
