@@ -16,6 +16,17 @@ router.get("/volunteer", async (req, res) => {
   }
 });
 
+router.get("/getVolunteers", async (req, res) => {
+  try {
+    const volunteers = await db("users")
+      .where({ role: "volunteer" })
+      .select("id", "firstName", "lastName", "email");
+    res.status(200).json(volunteers);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "could not process your request" });
+  }
+});
 
 router.get("/student", async (req, res) => {
   try {
