@@ -30,7 +30,7 @@ app.options("*", cors());
 app.use(express.json());
 
 app.use("/auth", authRoutes)
-app.use("/user", checkAdmin, userRoutes);
+app.use("/user", userRoutes);
 app.use("/tasks", checkAdmin, taskRoutes);
 
 app.get("/", (req, res) => {

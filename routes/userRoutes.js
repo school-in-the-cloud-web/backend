@@ -3,11 +3,12 @@ const jwt = require("jsonwebtoken");
 const db = require("../data/dbConfig");
 
 const { findTasks } = require("../models/utils");
+const { checkAdmin } = require("../middleware/index");
 
-router.get("/volunteer", async (req, res) => {
+router.get("/volunteer", checkAdmin, async (req, res) => {
   const decoded = jwt.verify(req.headers.authorization, process.env.SECRET);
   const id = decoded.sub;
-  
+
   try {
     const result = await findTasks(id);
     res.status(200).json(result);
@@ -16,7 +17,7 @@ router.get("/volunteer", async (req, res) => {
   }
 });
 
-router.get("/getVolunteers", async (req, res) => {
+router.get("/getVolunteers", checkAdmin, async (req, res) => {
   try {
     const volunteers = await db("users")
       .where({ role: "volunteer" })
